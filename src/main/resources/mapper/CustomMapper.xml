@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.hfbin.crud.dao.CustomMapper" >
+  <resultMap id="BaseResultMap" type="cn.hfbin.crud.bean.Custom" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customname" property="customname" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="CHAR" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="cn.hfbin.crud.bean.Custom" extends="BaseResultMap" >
+    <result column="address" property="address" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, customname, gender, birthday, phone
+  </sql>
+  <sql id="Blob_Column_List" >
+    address
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="cn.hfbin.crud.bean.CustomExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from CustomTable
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.hfbin.crud.bean.CustomExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from CustomTable
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="searchAllCustom" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+      select * from CustomTable  where  1=1
+      <if test="id!=null">
+          OR id=#{id}
+      </if>
+      <if test="id!=null">
+          OR customname=#{customname}
+      </if>
+
+  </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from CustomTable
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from CustomTable
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.hfbin.crud.bean.CustomExample" >
+    delete from CustomTable
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <!--<insert id="insert" parameterType="cn.hfbin.crud.bean.Custom" >-->
+    <!--insert into CustomTable (id, customname, gender,-->
+      <!--birthday, phone, address-->
+      <!--)-->
+    <!--values (#{id,jdbcType=INTEGER}, #{customname,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR},-->
+      <!--#{birthday,jdbcType=DATE}, #{phone,jdbcType=VARCHAR}, #{address,jdbcType=LONGVARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+  <insert id="insertCustom" parameterType="cn.hfbin.crud.bean.Custom" >
+    insert into CustomTable (id, customname, gender,
+      birthday, phone, address
+      )
+    values (#{id,jdbcType=INTEGER}, #{customname,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR},
+      #{birthday,jdbcType=DATE}, #{phone,jdbcType=VARCHAR}, #{address,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertCustomNoKey" useGeneratedKeys="true"
+          keyProperty="id" parameterType="cn.hfbin.crud.bean.Custom" >
+    insert into CustomTable (customname, gender,
+      birthday, phone, address
+      )
+    values (#{customname,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR},
+      #{birthday,jdbcType=DATE}, #{phone,jdbcType=VARCHAR}, #{address,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.hfbin.crud.bean.Custom" >
+    insert into CustomTable
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="customname != null" >
+        customname,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="customname != null" >
+        #{customname,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <!--<select id="countByExample" parameterType="cn.hfbin.crud.bean.CustomExample" resultType="java.lang.Integer" >-->
+    <!--select count(*) from CustomTable-->
+    <!--<if test="_parameter != null" >-->
+      <!--<include refid="Example_Where_Clause" />-->
+    <!--</if>-->
+  <!--</select>-->
+  <!--<update id="updateByExampleSelective" parameterType="map" >-->
+    <!--update CustomTable-->
+    <!--<set >-->
+      <!--<if test="record.id != null" >-->
+        <!--id = #{record.id,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="record.customname != null" >-->
+        <!--customname = #{record.customname,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="record.gender != null" >-->
+        <!--gender = #{record.gender,jdbcType=CHAR},-->
+      <!--</if>-->
+      <!--<if test="record.birthday != null" >-->
+        <!--birthday = #{record.birthday,jdbcType=DATE},-->
+      <!--</if>-->
+      <!--<if test="record.phone != null" >-->
+        <!--phone = #{record.phone,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="record.address != null" >-->
+        <!--address = #{record.address,jdbcType=LONGVARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--<if test="_parameter != null" >-->
+      <!--<include refid="Update_By_Example_Where_Clause" />-->
+    <!--</if>-->
+  <!--</update>-->
+  <!--<update id="updateByExampleWithBLOBs" parameterType="map" >-->
+    <!--update CustomTable-->
+    <!--set id = #{record.id,jdbcType=INTEGER},-->
+    <!--customname = #{record.customname,jdbcType=VARCHAR},-->
+    <!--gender = #{record.gender,jdbcType=CHAR},-->
+    <!--birthday = #{record.birthday,jdbcType=DATE},-->
+    <!--phone = #{record.phone,jdbcType=VARCHAR},-->
+    <!--address = #{record.address,jdbcType=LONGVARCHAR}-->
+    <!--<if test="_parameter != null" >-->
+      <!--<include refid="Update_By_Example_Where_Clause" />-->
+    <!--</if>-->
+  <!--</update>-->
+
+
+
+  <update id="updateByExample" parameterType="map" >
+    update CustomTable
+    set id = #{record.id,jdbcType=INTEGER},
+    customname = #{record.customname,jdbcType=VARCHAR},
+    gender = #{record.gender,jdbcType=CHAR},
+    birthday = #{record.birthday,jdbcType=DATE},
+    phone = #{record.phone,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hfbin.crud.bean.Custom" >
+    update CustomTable
+    <set >
+      <if test="customname != null" >
+        customname = #{customname,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--<update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.hfbin.crud.bean.Custom" >-->
+    <!--update CustomTable-->
+    <!--set customname = #{customname,jdbcType=VARCHAR},-->
+      <!--gender = #{gender,jdbcType=CHAR},-->
+      <!--birthday = #{birthday,jdbcType=DATE},-->
+      <!--phone = #{phone,jdbcType=VARCHAR},-->
+      <!--address = #{address,jdbcType=LONGVARCHAR}-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+  <update id="updateByPrimaryKey" parameterType="cn.hfbin.crud.bean.Custom" >
+    update CustomTable
+    set customname = #{customname,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=CHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      phone = #{phone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
